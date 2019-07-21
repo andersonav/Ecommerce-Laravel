@@ -923,11 +923,11 @@ h4.offset__title {
 .shopping__btn li a:hover{
   background: #ff4136;
   border: 1px solid #ff4136;
-  color: #fff;
+  color: #fff !important;
 }
 .shopping__btn .shp__checkout a{
   background-color: #762c16;
-  color: #fff;
+  color: #fff !important;
 }
 .shp__single__product {
   display: flex;

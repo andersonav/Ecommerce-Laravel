@@ -14,3 +14,10 @@
 Route::get('/', function () {
     return view('index');
 });
+
+Route::get('/singleProduct/{id}', 'ProdutoController@singleProduct')->name('singleProduct');
+Route::get('/addPedido/{id}', 'PedidoController@addPedido')->name('addPedido');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

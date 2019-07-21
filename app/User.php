@@ -9,13 +9,18 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    protected $table = "usuario";
+    protected $primaryKey = "usuario_id";
+    const CREATE_AT = "data_criacao";
+    const UPDATED_AT = "data_atualizacao";
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'nome', 'email', 'password',
     ];
 
     /**

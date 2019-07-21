@@ -9,30 +9,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Place favicon.ico in the root directory -->
-    <link rel="shortcut icon" type="image/x-icon" href="images/lindoPet.png">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="{{asset('images/lindoPet.png')}}">
+    <link rel="apple-touch-icon" href="{{asset('apple-touch-icon.png')}}">
 
 
     <!-- All css files are included here. -->
     <!-- Bootstrap fremwork main css -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
     <!-- Owl Carousel main css -->
-    <link rel="stylesheet" href="css/owl.carousel.min.css">
-    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="{{asset('css/owl.carousel.min.css')}}">
+    <link rel="stylesheet" href="{{asset('css/owl.theme.default.min.css')}}">
     <!-- This core.css file contents all plugings css file. -->
-    <link rel="stylesheet" href="css/core.css">
+    <link rel="stylesheet" href="{{asset('css/core.css')}}">
     <!-- Theme shortcodes/elements style -->
-    <link rel="stylesheet" href="css/shortcode/shortcodes.css">
+    <link rel="stylesheet" href="{{asset('css/shortcode/shortcodes.css')}}">
     <!-- Theme main style -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="{{asset('css/style.css')}}">
     <!-- Responsive css -->
-    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="{{asset('css/responsive.css')}}">
     <!-- User style -->
-    <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" href="{{asset('css/custom.css')}}">
 
 
     <!-- Modernizr JS -->
-    <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+    <script src="{{asset('js/vendor/modernizr-2.8.3.min.js')}}"></script>
 </head>
 
 <body>
@@ -50,8 +50,8 @@
                     <div class="row">
                         <div class="col-md-2 col-lg-2 col-sm-3 col-xs-3">
                             <div class="logo">
-                                <a href="index.html">
-                                    <img src="images/lindoPet.png" alt="logo" style="width: 63px !important;">
+                                <a href="{{ url()->previous() }}">
+                                    <img src="{{asset('images/lindoPet.png')}}" alt="logo" style="width: 63px !important;">
                                 </a>
                             </div>
                         </div>
@@ -90,7 +90,7 @@
                                             <li>
                                                 <div class="mega-item-img">
                                                     <a href="shop.html">
-                                                        <img src="images/feature-img/3.png" alt="">
+                                                        <img src="{{asset('images/feature-img/3.png')}}" alt="">
                                                     </a>
                                                 </div>
                                             </li>
@@ -170,13 +170,13 @@
                         <div class="shp__single__product">
                             <div class="shp__pro__thumb">
                                 <a href="#">
-                                    <img src="images/product/sm-img/1.jpg" alt="product images">
+                                    <img src="{{asset('images/product/sm-img/1.jpg')}}" alt="product images">
                                 </a>
                             </div>
                             <div class="shp__pro__details">
-                                <h2><a href="product-details.html">BO&Play Wireless Speaker</a></h2>
+                                <h2><a href="product-details.html">Testando Carrinho 1</a></h2>
                                 <span class="quantity">QTY: 1</span>
-                                <span class="shp__price">$105.00</span>
+                                <span class="shp__price">R$ 105.00</span>
                             </div>
                             <div class="remove__btn">
                                 <a href="#" title="Remove this item"><i class="zmdi zmdi-close"></i></a>
@@ -185,13 +185,13 @@
                         <div class="shp__single__product">
                             <div class="shp__pro__thumb">
                                 <a href="#">
-                                    <img src="images/product/sm-img/2.jpg" alt="product images">
+                                    <img src="{{asset('images/product/sm-img/2.jpg')}}" alt="product images">
                                 </a>
                             </div>
                             <div class="shp__pro__details">
-                                <h2><a href="product-details.html">Brone Candle</a></h2>
-                                <span class="quantity">QTY: 1</span>
-                                <span class="shp__price">$25.00</span>
+                                <h2><a href="product-details.html">Brone CandleTestando Carrinho 1</a></h2>
+                                <span class="quantity">QTY: 2</span>
+                                <span class="shp__price">$50.00</span>
                             </div>
                             <div class="remove__btn">
                                 <a href="#" title="Remove this item"><i class="zmdi zmdi-close"></i></a>
@@ -199,12 +199,12 @@
                         </div>
                     </div>
                     <ul class="shoping__total">
-                        <li class="subtotal">Subtotal:</li>
-                        <li class="total__price">$130.00</li>
+                        <li class="subtotal">Total:</li>
+                        <li class="total__price">$155.00</li>
                     </ul>
                     <ul class="shopping__btn">
-                        <li><a href="cart.html">View Cart</a></li>
-                        <li class="shp__checkout"><a href="checkout.html">Checkout</a></li>
+                        <!-- <li><a href="cart.html">Ver</a></li> -->
+                        <li class="shp__checkout"><a href="checkout.html">Finalizar Compra</a></li>
                     </ul>
                 </div>
             </div>
@@ -222,8 +222,8 @@
                         <div class="col-md-12">
                             <div class="ft__widget">
                                 <div class="ft__logo">
-                                    <a href="index.html">
-                                        <img src="images/lindoPet.png" alt="footer logo" style="width: 105px; display: block; text-align: center; margin: 0 auto;">
+                                    <a href="{{ url()->previous() }}">
+                                        <img src="{{asset('images/lindoPet.png')}}" alt="footer logo" style="width: 105px; display: block; text-align: center; margin: 0 auto;">
                                     </a>
                                 </div>
                                 <!-- <div class="footer-address">
@@ -274,7 +274,7 @@
                                             Todos os direitos reservados.</p>
                                     </div>
                                     <ul class="footer__menu">
-                                        <li><a href="index.html">Inicio</a></li>
+                                        <li><a href="{{ url()->previous() }}">Inicio</a></li>
                                         <li><a href="shop.html">Carrinho</a></li>
                                         <li><a href="contact.html">Conta</a></li>
                                     </ul>
@@ -296,7 +296,7 @@
                         <div class="modal-product">
                             <div class="product-images">
                                 <div class="main-image images">
-                                    <img alt="big images" src="images/product/big-img/1.jpg">
+                                    <img alt="big images" src="{{asset('images/product/big-img/1.jpg')}}">
                                 </div>
                             </div>
                             <div class="product-info">
@@ -365,17 +365,17 @@
     </div>
 
     <!-- jquery latest version -->
-    <script src="js/vendor/jquery-1.12.0.min.js"></script>
+    <script src="{{asset('js/vendor/jquery-1.12.0.min.js')}}"></script>
     <!-- Bootstrap framework js -->
-    <script src="js/bootstrap.min.js"></script>
+    <script src="{{asset('js/bootstrap.min.js')}}"></script>
     <!-- All js plugins included in this file. -->
-    <script src="js/plugins.js"></script>
-    <script src="js/slick.min.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
+    <script src="{{asset('js/plugins.js')}}"></script>
+    <script src="{{asset('js/slick.min.js')}}"></script>
+    <script src="{{asset('js/owl.carousel.min.js')}}"></script>
     <!-- Waypoints.min.js. -->
-    <script src="js/waypoints.min.js"></script>
+    <script src="{{asset('js/waypoints.min.js')}}"></script>
     <!-- Main js file that contents all jQuery plugins activation. -->
-    <script src="js/main.js"></script>
+    <script src="{{asset('js/main.js')}}"></script>
 
 </body>
 

@@ -51,7 +51,7 @@
                                 <span class="shp__price">$25.00</span>
                             </div>
                             <ul class="shopping__btn">
-                                <li class="shp__checkout"><a href="javascript:void(0);">Adicionar ao Carrinho</a></li>
+                                <li class="shp__checkout"><a href="{{route('singleProduct', ['id' => 1])}}">Ver Detalhes</a></li>
                             </ul>
                         </div>
                     </div>

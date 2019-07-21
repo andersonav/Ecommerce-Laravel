@@ -21,6 +21,10 @@ class RedirectIfAuthenticated
             return redirect('/home');
         }
 
+        // if (Auth::guest()) {
+        //     return redirect()->guest('login');
+        // }
+
         return $next($request);
     }
 }
