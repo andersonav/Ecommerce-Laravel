@@ -30,7 +30,31 @@
     <!-- User style -->
     <link rel="stylesheet" href="{{asset('css/custom.css')}}">
 
+    <!-- jquery latest version -->
+    <script src="{{asset('js/vendor/jquery-1.12.0.min.js')}}"></script>
+    <script>
+        jQuery.browser = {};
+        (function() {
+            jQuery.browser.msie = false;
+            jQuery.browser.version = 0;
+            if (navigator.userAgent.match(/MSIE ([0-9]+)\./)) {
+                jQuery.browser.msie = true;
+                jQuery.browser.version = RegExp.$1;
+            }
+        })();
+    </script>
 
+    <script>
+        $(document).ready(function() {
+            if ($(".shp__single__product").length == 0) {
+                $("#btnCompra").hide();
+            } else {
+                $("#btnCompra").show();
+            }
+        });
+    </script>
+
+    <script src="{{asset('js/jquery.maskedinput-1.1.4.pack.js')}}"></script>
     <!-- Modernizr JS -->
     <script src="{{asset('js/vendor/modernizr-2.8.3.min.js')}}"></script>
 </head>
@@ -167,42 +191,32 @@
                         <a href="#"><i class="zmdi zmdi-close"></i></a>
                     </div>
                     <div class="shp__cart__wrap">
+                        @forelse($returnDetails as $produto)
                         <div class="shp__single__product">
                             <div class="shp__pro__thumb">
                                 <a href="#">
-                                    <img src="{{asset('images/product/sm-img/1.jpg')}}" alt="product images">
+                                    <img src="{{asset('images/'.$produto->imagem)}}" alt="Imagem do Produto">
                                 </a>
                             </div>
                             <div class="shp__pro__details">
-                                <h2><a href="product-details.html">Testando Carrinho 1</a></h2>
-                                <span class="quantity">QTY: 1</span>
-                                <span class="shp__price">R$ 105.00</span>
+                                <h2><a href="product-details.html">{{$produto->nome}}</a></h2>
+                                <span class="quantity">QTY: {{$produto->quantidade_produto_carrinho}}</span>
+                                <span class="shp__price">R$ {{$produto->valor}}</span>
                             </div>
                             <div class="remove__btn">
                                 <a href="#" title="Remove this item"><i class="zmdi zmdi-close"></i></a>
                             </div>
                         </div>
-                        <div class="shp__single__product">
-                            <div class="shp__pro__thumb">
-                                <a href="#">
-                                    <img src="{{asset('images/product/sm-img/2.jpg')}}" alt="product images">
-                                </a>
-                            </div>
-                            <div class="shp__pro__details">
-                                <h2><a href="product-details.html">Brone CandleTestando Carrinho 1</a></h2>
-                                <span class="quantity">QTY: 2</span>
-                                <span class="shp__price">$50.00</span>
-                            </div>
-                            <div class="remove__btn">
-                                <a href="#" title="Remove this item"><i class="zmdi zmdi-close"></i></a>
-                            </div>
-                        </div>
+                        @empty
+                        <p style="text-align: center;">Carrinho Vazio</p>
+                        @endforelse
+
                     </div>
                     <ul class="shoping__total">
                         <li class="subtotal">Total:</li>
-                        <li class="total__price">$155.00</li>
+                        <li class="total__price">${{$valorTotalPedido[0]->valor_total or 0}}</li>
                     </ul>
-                    <ul class="shopping__btn">
+                    <ul class="shopping__btn" id="btnCompra">
                         <!-- <li><a href="cart.html">Ver</a></li> -->
                         <li class="shp__checkout"><a href="checkout.html">Finalizar Compra</a></li>
                     </ul>
@@ -364,8 +378,7 @@
         </div>
     </div>
 
-    <!-- jquery latest version -->
-    <script src="{{asset('js/vendor/jquery-1.12.0.min.js')}}"></script>
+
     <!-- Bootstrap framework js -->
     <script src="{{asset('js/bootstrap.min.js')}}"></script>
     <!-- All js plugins included in this file. -->
@@ -376,6 +389,7 @@
     <script src="{{asset('js/waypoints.min.js')}}"></script>
     <!-- Main js file that contents all jQuery plugins activation. -->
     <script src="{{asset('js/main.js')}}"></script>
+
 
 </body>
 

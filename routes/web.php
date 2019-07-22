@@ -1,5 +1,10 @@
 <?php
 
+use App\Produto;
+use App\Carrinho;
+use App\Pedido;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,8 +17,29 @@
 */
 
 Route::get('/', function () {
-    return view('index');
-});
+    $returnDetails = array();
+    $valorTotalPedido = 0;
+    if (\Auth::check()) {
+        $selectPedido = Pedido::where("status", '=', 'Em Andamento')
+            ->where('usuario_id_fk', '=',  Auth::user()->usuario_id)
+            ->get();
+
+        if (count($selectPedido) != 0) {
+            $idPedido = $selectPedido[0]->pedido_id;
+            $returnDetails = Carrinho::where("pedido_id_fk", '=', $idPedido)->join("produto", 'produto_id', 'produto_id_fk')->get();
+            $valorTotalPedido = Pedido::where("pedido_id", '=', $idPedido)->get();
+        }
+    }
+
+    $categorias = DB::table('categoria')->where('ativo', '=', 1)->get();
+
+    $produtos = Produto::select('produto.*', 'categoria.nome as categoriaNome')
+        ->join('categoria', 'categoria_id', '=', 'categoria_id_fk')
+        ->where("produto.ativo", '=', 1)
+        ->get();
+
+    return view('index', compact('returnDetails', 'valorTotalPedido', 'categorias', 'produtos'));
+})->name('inicio');
 
 Route::get('/singleProduct/{id}', 'ProdutoController@singleProduct')->name('singleProduct');
 Route::get('/addPedido/{id}', 'PedidoController@addPedido')->name('addPedido');

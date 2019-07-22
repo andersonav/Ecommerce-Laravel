@@ -11,7 +11,7 @@ class User extends Authenticatable
 
     protected $table = "usuario";
     protected $primaryKey = "usuario_id";
-    const CREATE_AT = "data_criacao";
+    const CREATED_AT = "data_criacao";
     const UPDATED_AT = "data_atualizacao";
 
     /**
@@ -19,16 +19,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [
-        'nome', 'email', 'password',
-    ];
+    protected $guarded = [];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
+    
 }

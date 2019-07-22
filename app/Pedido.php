@@ -4,10 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Produto extends Model
+class Pedido extends Model
 {
-    protected  $table = "produto";
-    protected $primaryKey = "produto_id";
+    protected  $table = "pedido";
+    protected $primaryKey = "pedido_id";
     const CREATED_AT = "data_criacao";
     const UPDATED_AT = "data_atualizacao";
 
