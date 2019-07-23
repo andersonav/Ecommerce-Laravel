@@ -43,6 +43,11 @@ Route::get('/', function () {
 
 Route::get('/singleProduct/{id}', 'ProdutoController@singleProduct')->name('singleProduct');
 Route::get('/addPedido/{id}', 'PedidoController@addPedido')->name('addPedido');
+Route::get('/verPedido', 'PedidoController@verPedido')->name('verPedido');
+
+Route::any('/notifications/ps', 'CompraController@ipnNotification')->name('pagseguro.notification');
+Route::post('/pagsesdsdsds', 'NotificationController@notification')->name('pagseguro.redirect');
+Route::post('/pagseguro', 'CompraController@payment')->name('api.pagseguro');
 
 Auth::routes();
 

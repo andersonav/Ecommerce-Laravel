@@ -24,7 +24,8 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
-                <form action="#">
+                <form action="{{route('api.pagseguro')}}" method="POST">
+                {{ csrf_field() }}
                     <div class="table-content table-responsive">
                         <table>
                             <thead>
@@ -102,7 +103,7 @@
                                     </tbody>
                                 </table>
                                 <div class="wc-proceed-to-checkout">
-                                    <a href="checkout.html">Ir para Checkout</a>
+                                    <button id="btnPageLogin" type="submit">Ir para Checkout</button>
                                 </div>
                             </div>
                         </div>

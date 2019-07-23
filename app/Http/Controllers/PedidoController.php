@@ -48,4 +48,14 @@ class PedidoController extends Controller
         $valorTotalPedido = Pedido::where("pedido_id", '=', $idPedido)->get();
         return view('carrinho', compact('returnDetails', 'valorTotalPedido'));
     }
+    public function verPedido()
+    {
+        $selectPedido = Pedido::where("status", '=', 'Em Andamento')
+            ->where('usuario_id_fk', '=',  Auth::user()->usuario_id)
+            ->get();
+        $idPedido = $selectPedido[0]->pedido_id;
+        $returnDetails = Carrinho::where("pedido_id_fk", '=', $idPedido)->join("produto", 'produto_id', 'produto_id_fk')->get();
+        $valorTotalPedido = Pedido::where("pedido_id", '=', $idPedido)->get();
+        return view('carrinho', compact('returnDetails', 'valorTotalPedido'));
+    }
 }

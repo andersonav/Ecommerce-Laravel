@@ -218,7 +218,7 @@
                     </ul>
                     <ul class="shopping__btn" id="btnCompra">
                         <!-- <li><a href="cart.html">Ver</a></li> -->
-                        <li class="shp__checkout"><a href="checkout.html">Finalizar Compra</a></li>
+                        <li class="shp__checkout"><a href="{{route('verPedido')}}">Finalizar Compra</a></li>
                     </ul>
                 </div>
             </div>
