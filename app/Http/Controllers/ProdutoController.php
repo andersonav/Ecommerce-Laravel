@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Produto;
 use App\Pedido;
 use App\Carrinho;
+use App\User;
 use Illuminate\Support\Facades\Auth;
 
 class ProdutoController extends Controller
@@ -24,6 +25,9 @@ class ProdutoController extends Controller
                 $returnDetails = Carrinho::where("pedido_id_fk", '=', $idPedido)->join("produto", 'produto_id', 'produto_id_fk')->get();
                 $valorTotalPedido = Pedido::where("pedido_id", '=', $idPedido)->get();
             }
+            $usuario = User::where("usuario_id", '=', Auth::user()->usuario_id)
+                ->where('ativo', '=',  1)
+                ->get();
         }
 
         $produto = Produto::select('produto.*', 'categoria.nome as categoriaNome')
@@ -31,6 +35,6 @@ class ProdutoController extends Controller
             ->where("produto_id", '=', $id)
             ->where("produto.ativo", '=', 1)
             ->get();
-        return view('single-product', compact('returnDetails', 'valorTotalPedido','produto'));
+        return view('single-product', compact('returnDetails', 'valorTotalPedido', 'produto', 'usuario'));
     }
 }

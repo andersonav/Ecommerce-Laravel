@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Produto;
 use App\Carrinho;
 use App\Pedido;
+use App\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class PedidoController extends Controller
@@ -68,10 +70,18 @@ class PedidoController extends Controller
         $selectPedido = Pedido::where("status", '=', 'Em Andamento')
             ->where('usuario_id_fk', '=',  Auth::user()->usuario_id)
             ->get();
-        $idPedido = $selectPedido[0]->pedido_id;
-        $returnDetails = Carrinho::where("pedido_id_fk", '=', $idPedido)->join("produto", 'produto_id', 'produto_id_fk')->get();
-        $valorTotalPedido = Pedido::where("pedido_id", '=', $idPedido)->get();
-        return view('carrinho', compact('returnDetails', 'valorTotalPedido'));
+        $usuario = User::where("usuario_id", '=', Auth::user()->usuario_id)
+            ->where('ativo', '=',  1)
+            ->get();
+        $returnDetails = array();
+        $valorTotalPedido = array();
+        if (count($selectPedido) != 0) {
+            $idPedido = $selectPedido[0]->pedido_id;
+            $returnDetails = Carrinho::where("pedido_id_fk", '=', $idPedido)->join("produto", 'produto_id', 'produto_id_fk')->get();
+            $valorTotalPedido = Pedido::where("pedido_id", '=', $idPedido)->get();
+        }
+
+        return view('carrinho', compact('returnDetails', 'valorTotalPedido', 'usuario'));
     }
     public function removerItem(Request $request)
     {
@@ -83,5 +93,66 @@ class PedidoController extends Controller
         $decrementPedido = Pedido::where("pedido_id", '=', $request->pedidoId)
             ->where('usuario_id_fk', '=',  Auth::user()->usuario_id)->decrement('valor_total', $valorDecrementado);
         echo response()->json($decrementPedido);
+    }
+    public function paymentVirtual()
+    {
+        $usuario = User::where("usuario_id", '=', Auth::user()->usuario_id)
+            ->where('ativo', '=',  1)
+            ->get();
+        $selectPedido = Pedido::where("status", '=', 'Em Andamento')
+            ->where('usuario_id_fk', '=',  Auth::user()->usuario_id)
+            ->get();
+        $response = array();
+        if ($usuario[0]->saldo >= $selectPedido[0]->valorTotal) {
+            if ($usuario[0]->saldo == 0 ||  $selectPedido[0]->valor_total == 0) {
+                $response = [
+                    "mensagem" => "Saldo insuficiente ou nenhum produto no carrinho!",
+                    "tipoMensagem" => 'error'
+                ];
+            } else {
+                $decrementSaldo = User::where("usuario_id", '=', Auth::user()->usuario_id)
+                    ->decrement('saldo', $selectPedido[0]->valor_total);
+
+                $updateStatusPedido = Pedido::where("pedido_id", '=', $selectPedido[0]->pedido_id)->update([
+                    'status' => 'Aprovado'
+                ]);
+                $response = [
+                    "mensagem" => "Pagamento através de moeda virtual realizado!",
+                    "tipoMensagem" => 'success'
+                ];
+            }
+        } else {
+            $response = [
+                "mensagem" => "Pagamento não realizado, pois saldo da moeda virtual é inferior ao valor da compra!",
+                "tipoMensagem" => 'error'
+            ];
+        }
+        return response()->json($response);
+    }
+
+    public function validarCupom(Request $request)
+    {
+        $selectCupom = DB::table('cupom')->where('identificador', '=', $request->valorCupom)->where('ativo', '=', 1)->get();
+        $response = array();
+        if (count($selectCupom) != 0) {
+            $incrementSaldo = User::where("usuario_id", '=', Auth::user()->usuario_id)
+                ->increment('saldo', $selectCupom[0]->valor);
+
+
+            $updateCupom = DB::table('cupom')->where("cupom_id", '=', $selectCupom[0]->cupom_id)->update([
+                'ativo' => 0
+            ]);
+
+            $response = [
+                "mensagem" => "Cupom adicionado com sucesso!",
+                "tipoMensagem" => 'success'
+            ];
+        } else {
+            $response = [
+                "mensagem" => "Cupom inválido ou já utilizado. Por favor digite um novo cupom!",
+                "tipoMensagem" => 'error'
+            ];
+        }
+        return response()->json($response);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Carrinho;
 use App\Pedido;
+use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -29,9 +30,13 @@ class HomeController extends Controller
         $selectPedido = Pedido::where("status", '=', 'Em Andamento')
             ->where('usuario_id_fk', '=',  Auth::user()->usuario_id)
             ->get();
+
+        $usuario = User::where("usuario_id", '=', Auth::user()->usuario_id)
+            ->where('ativo', '=',  1)
+            ->get();
         $idPedido = $selectPedido[0]->pedido_id;
         $returnDetails = Carrinho::where("pedido_id_fk", '=', $idPedido)->join("produto", 'produto_id', 'produto_id_fk')->get();
         $valorTotalPedido = Pedido::where("pedido_id", '=', $idPedido)->get();
-        return view('home', compact('returnDetails', 'valorTotalPedido'));
+        return view('home', compact('returnDetails', 'valorTotalPedido', 'usuario'));
     }
 }

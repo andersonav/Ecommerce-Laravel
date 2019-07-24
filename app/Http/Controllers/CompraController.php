@@ -8,7 +8,7 @@ use App\Carrinho;
 use App\Pedido;
 use Auth;
 use App\User;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class CompraController extends Controller
 {
@@ -38,6 +38,7 @@ class CompraController extends Controller
         }
         $data = [
             'items' => $arrayItens,
+            'reference' => $selectPedido[0]->pedido_id,
             'shipping' => [
                 'address' => [
                     'postalCode' => $selectUsuario[0]->cep,
@@ -99,7 +100,22 @@ class CompraController extends Controller
         $transaction = simplexml_load_string($transaction);
         $status = $this->returnStatus($transaction->status);
         $forma = $this->returnForma($transaction->paymentMethod->type);
-        $updateFatura = Fatura::where('id', '=', $transaction->items->item->id)->update([
+        if ($transaction->status == 3) {
+            $cupom = substr(md5(date("H:i:s")), 1, 6);
+            $pedido = Pedido::where("pedido_id", '=', $transaction->reference)->get();
+            $valorPedido = $pedido[0]->valor_total;
+
+            $insertCupom = DB::table('cupom')->create([
+                'limite' => 1,
+                'valor' => intval($valorPedido),
+                'identificador' => $cupom,
+                'ativo' => 1
+            ]);
+
+            // Enviar email para cliente com cupom
+        }
+
+        $updateFatura = Pedido::where('pedido_id', '=', $transaction->reference)->update([
             'forma' => $forma,
             'status' => $status
         ]);

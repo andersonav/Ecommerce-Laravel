@@ -153,8 +153,18 @@
                         <div class="">
                             <ul class="menu-extra" style="width: 100%;">
                                 <!-- <li class="search search__open hidden-xs"><span class="ti-search"></span></li> -->
-                                <!-- <li><a href="login-register.html"><span class="ti-user"></span></a></li> -->
                                 <li class="cart__menu"><span class="ti-shopping-cart"></span></li>
+                                @auth
+                                <li> <a href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();" title="Sair">
+                                        <span class="ti-shift-left"></span></a>
+
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        {{ csrf_field() }}
+                                    </form>
+                                </li>
+                                @endauth
+
                                 <!-- <li class="toggle__menu hidden-xs hidden-sm"><span class="ti-menu"></span></li> -->
                             </ul>
                         </div>
@@ -216,13 +226,18 @@
                     </div>
                     <ul class="shoping__total">
                         <li class="subtotal">Total:</li>
-                        <li class="total__price">${{$valorTotalPedido[0]->valor_total or 0}}</li>
+                        <li class="total__price">R$ {{$valorTotalPedido[0]->valor_total or 0}}</li>
+                        @auth
+                        <li class="subtotal">Carteira Virtual:</li>
+                        <li class="total__price">R$ {{$usuario[0]->saldo or 0}}</li>
+                        @endauth
                     </ul>
 
                     @auth
                     <ul class="shopping__btn" id="btnCompra">
                         <!-- <li><a href="cart.html">Ver</a></li> -->
                         <li class="shp__checkout"><a href="{{route('verPedido')}}">Finalizar Compra</a></li>
+                        <li class="shp__checkout"><a href="javascript:void(0)" id="paymentVirtual">Pagar com Carteira Virtual</a></li>
                         <li class="shp__checkout"><a href="{{route('home')}}" style="background-color: black !important;">Entrar no Perfil</a></li>
                     </ul>
                     @else

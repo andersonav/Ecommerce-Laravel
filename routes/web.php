@@ -50,6 +50,8 @@ Route::post('/removerItem', 'PedidoController@removerItem')->name('removerItem')
 Route::any('/notifications/ps', 'CompraController@ipnNotification')->name('pagseguro.notification');
 Route::post('/pagsesdsdsds', 'NotificationController@notification')->name('pagseguro.redirect');
 Route::post('/pagseguro', 'CompraController@payment')->name('api.pagseguro');
+Route::get('/paymentVirtual', 'PedidoController@paymentVirtual')->name('paymentVirtual');
+Route::get('/validarCupom', 'PedidoController@validarCupom')->name('validarCupom');
 
 Auth::routes();
 

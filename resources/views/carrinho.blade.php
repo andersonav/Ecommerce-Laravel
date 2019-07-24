@@ -39,7 +39,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($returnDetails as $produto)
+                                @forelse($returnDetails as $produto)
                                 <tr id="produtos">
                                     <td class="product-thumbnail"><a href="#"><img src="{{asset('images/product/4.png')}}" alt="product img" /></a></td>
                                     <td class="product-name"><a href="#">{{$produto->nome}}</a></td>
@@ -48,7 +48,11 @@
                                     <td class="product-subtotal">{{$produto->valor * $produto->quantidade_produto_carrinho}}</td>
                                     <td class="product-remove"><a href="#" onclick="removerItem({{$produto->carrinho_id}}, {{$produto->pedido_id_fk}}, '{{$produto->nome}}')">X</a></td>
                                 </tr>
-                                @endforeach
+                                @empty
+                                <tr>
+                                    <td colspan="6">Não há produtos no carrinho</td>
+                                </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -59,9 +63,9 @@
                             </div>
                             <div class="coupon">
                                 <h3>Cupom</h3>
-                                <p>Digite um cupom de desconto.</p>
-                                <input type="text" placeholder="Código de cupom" />
-                                <input type="submit" value="Aplicar Cupom" />
+                                <p>Digite um cupom para atualizar sua moeda virtual.</p>
+                                <input type="text" placeholder="Código do cupom" id="cupom"/>
+                                <input type="button" id="btnCupom" value="Aplicar Cupom" />
                             </div>
                         </div>
                         <div class="col-md-4 col-sm-5 col-xs-12">
@@ -97,14 +101,16 @@
                                         <tr class="order-total">
                                             <th>Total</th>
                                             <td>
-                                                <strong><span class="amount">{{$valorTotalPedido[0]->valor_total}}</span></strong>
+                                                <strong><span class="amount">{{$valorTotalPedido[0]->valor_total or 0}}</span></strong>
+                                                <br /><br />
+                                                <div class="wc-proceed-to-checkout" id="btnCheckout" style="display:none;">
+                                                    <button id="btnPageLogin" type="submit">Pagar</button>
+                                                </div>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
-                                <div class="wc-proceed-to-checkout" id="btnCheckout">
-                                    <button id="btnPageLogin" type="submit">Ir para Checkout</button>
-                                </div>
+
                             </div>
                         </div>
                     </div>
