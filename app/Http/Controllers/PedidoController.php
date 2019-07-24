@@ -27,10 +27,17 @@ class PedidoController extends Controller
             $updateValorTotal = Pedido::where("pedido_id", '=', $idPedido)->update([
                 'valor_total' => intval($valorTotal)
             ]);
-            $insertCarrinho = Carrinho::create([
-                'produto_id_fk' => $id,
-                'pedido_id_fk' => $idPedido
-            ]);
+            $selectProdutoCarrinho = Carrinho::where("pedido_id_fk", '=', $idPedido)->where("produto_id_fk", '=', $id)->get();
+            if (count($selectProdutoCarrinho) != 0) {
+                $updateCarrinho = Carrinho::where("pedido_id_fk", '=', $idPedido)->where("produto_id_fk", '=', $id)->update([
+                    'quantidade_produto_carrinho' => intval($selectProdutoCarrinho[0]->quantidade_produto_carrinho + 1)
+                ]);
+            } else {
+                $insertCarrinho = Carrinho::create([
+                    'produto_id_fk' => $id,
+                    'pedido_id_fk' => $idPedido
+                ]);
+            }
         } else {
             $idPedido = Pedido::create([
                 'status' => 'Em Andamento',
@@ -38,15 +45,23 @@ class PedidoController extends Controller
                 'usuario_id_fk' =>  Auth::user()->usuario_id
             ])->pedido_id;
 
-            $insertCarrinho = Carrinho::create([
-                'produto_id_fk' => $id,
-                'pedido_id_fk' => $idPedido
-            ]);
+            $selectProdutoCarrinho = Carrinho::where("pedido_id_fk", '=', $idPedido)->where("produto_id_fk", '=', $id)->get();
+            if (count($selectProdutoCarrinho) != 0) {
+                $updateCarrinho = Carrinho::where("pedido_id_fk", '=', $idPedido)->where("produto_id_fk", '=', $id)->update([
+                    'quantidade_produto_carrinho' => intval($selectProdutoCarrinho[0]->quantidade_produto_carrinho + 1)
+                ]);
+            } else {
+                $insertCarrinho = Carrinho::create([
+                    'produto_id_fk' => $id,
+                    'pedido_id_fk' => $idPedido
+                ]);
+            }
         }
 
         $returnDetails = Carrinho::where("pedido_id_fk", '=', $idPedido)->join("produto", 'produto_id', 'produto_id_fk')->get();
         $valorTotalPedido = Pedido::where("pedido_id", '=', $idPedido)->get();
-        return view('carrinho', compact('returnDetails', 'valorTotalPedido'));
+        return redirect()->route('verPedido');
+        // return view('carrinho', compact('returnDetails', 'valorTotalPedido'));
     }
     public function verPedido()
     {
@@ -57,5 +72,16 @@ class PedidoController extends Controller
         $returnDetails = Carrinho::where("pedido_id_fk", '=', $idPedido)->join("produto", 'produto_id', 'produto_id_fk')->get();
         $valorTotalPedido = Pedido::where("pedido_id", '=', $idPedido)->get();
         return view('carrinho', compact('returnDetails', 'valorTotalPedido'));
+    }
+    public function removerItem(Request $request)
+    {
+        $selectProdutoCarrinho = Carrinho::where("carrinho_id", '=', $request->carrinhoId)->join("produto", 'produto_id', 'produto_id_fk')->get();
+        $valorDecrementado = intval($selectProdutoCarrinho[0]->quantidade_produto_carrinho * $selectProdutoCarrinho[0]->valor);
+
+        $deleteProdutoCarrinho = Carrinho::where("carrinho_id", '=', $request->carrinhoId)->delete();
+
+        $decrementPedido = Pedido::where("pedido_id", '=', $request->pedidoId)
+            ->where('usuario_id_fk', '=',  Auth::user()->usuario_id)->decrement('valor_total', $valorDecrementado);
+        echo response()->json($decrementPedido);
     }
 }

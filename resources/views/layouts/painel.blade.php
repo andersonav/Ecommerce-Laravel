@@ -7,7 +7,7 @@
     <title>Ecommerce Pet</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Place favicon.ico in the root directory -->
     <link rel="shortcut icon" type="image/x-icon" href="{{asset('images/lindoPet.png')}}">
     <link rel="apple-touch-icon" href="{{asset('apple-touch-icon.png')}}">
@@ -45,18 +45,20 @@
     </script>
 
     <script>
-        $(document).ready(function() {
-            if ($(".shp__single__product").length == 0) {
-                $("#btnCompra").hide();
-            } else {
-                $("#btnCompra").show();
-            }
-        });
+        // $(document).ready(function() {
+        //     if ($(".shp__single__product").length == 0) {
+        //         $("#btnCompra").hide();
+
+        //     } else {
+        //         $("#btnCompra").show();
+        //     }
+        // });
     </script>
 
     <script src="{{asset('js/jquery.maskedinput-1.1.4.pack.js')}}"></script>
     <!-- Modernizr JS -->
     <script src="{{asset('js/vendor/modernizr-2.8.3.min.js')}}"></script>
+
 </head>
 
 <body>
@@ -204,7 +206,7 @@
                                 <span class="shp__price">R$ {{$produto->valor}}</span>
                             </div>
                             <div class="remove__btn">
-                                <a href="#" title="Remove this item"><i class="zmdi zmdi-close"></i></a>
+                                <a href="javascript:void(0);" title="Remover esse item" onclick="removerItem({{$produto->carrinho_id}}, {{$produto->pedido_id_fk}}, '{{$produto->nome}}')"><i class="zmdi zmdi-close"></i></a>
                             </div>
                         </div>
                         @empty
@@ -216,10 +218,20 @@
                         <li class="subtotal">Total:</li>
                         <li class="total__price">${{$valorTotalPedido[0]->valor_total or 0}}</li>
                     </ul>
+
+                    @auth
                     <ul class="shopping__btn" id="btnCompra">
                         <!-- <li><a href="cart.html">Ver</a></li> -->
                         <li class="shp__checkout"><a href="{{route('verPedido')}}">Finalizar Compra</a></li>
+                        <li class="shp__checkout"><a href="{{route('home')}}" style="background-color: black !important;">Entrar no Perfil</a></li>
                     </ul>
+                    @else
+                    <ul class="shopping__btn" id="btnCompra">
+                        <!-- <li><a href="cart.html">Ver</a></li> -->
+                        <li class="shp__checkout"><a href="{{route('login')}}">Entrar/Cadastrar</a></li>
+                    </ul>
+                    @endauth
+
                 </div>
             </div>
             <!-- End Cart Panel -->
@@ -389,8 +401,8 @@
     <script src="{{asset('js/waypoints.min.js')}}"></script>
     <!-- Main js file that contents all jQuery plugins activation. -->
     <script src="{{asset('js/main.js')}}"></script>
-
-
+    <script src="{{asset('js/sweetalert2.js')}}"></script>
+    <script src="{{asset('js/carrinho.js')}}"></script>
 </body>
 
 </html>

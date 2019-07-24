@@ -25,7 +25,7 @@
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <form action="{{route('api.pagseguro')}}" method="POST">
-                {{ csrf_field() }}
+                    {{ csrf_field() }}
                     <div class="table-content table-responsive">
                         <table>
                             <thead>
@@ -40,13 +40,13 @@
                             </thead>
                             <tbody>
                                 @foreach($returnDetails as $produto)
-                                <tr>
+                                <tr id="produtos">
                                     <td class="product-thumbnail"><a href="#"><img src="{{asset('images/product/4.png')}}" alt="product img" /></a></td>
                                     <td class="product-name"><a href="#">{{$produto->nome}}</a></td>
                                     <td class="product-price"><span class="amount">R$ {{$produto->valor}}</span></td>
                                     <td class="product-quantity"><input type="number" value="{{$produto->quantidade_produto_carrinho}}" /></td>
                                     <td class="product-subtotal">{{$produto->valor * $produto->quantidade_produto_carrinho}}</td>
-                                    <td class="product-remove"><a href="#">X</a></td>
+                                    <td class="product-remove"><a href="#" onclick="removerItem({{$produto->carrinho_id}}, {{$produto->pedido_id_fk}}, '{{$produto->nome}}')">X</a></td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -102,7 +102,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <div class="wc-proceed-to-checkout">
+                                <div class="wc-proceed-to-checkout" id="btnCheckout">
                                     <button id="btnPageLogin" type="submit">Ir para Checkout</button>
                                 </div>
                             </div>
@@ -113,5 +113,13 @@
         </div>
     </div>
 </div>
-
+<script>
+    $(document).ready(function() {
+        if ($("tr#produtos").length == 0) {
+            $("#btnCheckout").hide();
+        } else {
+            $("#btnCheckout").show();
+        }
+    });
+</script>
 @endsection
