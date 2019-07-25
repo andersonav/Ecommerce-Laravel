@@ -3,6 +3,7 @@
 use App\Produto;
 use App\Carrinho;
 use App\Pedido;
+use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 /*
@@ -29,6 +30,9 @@ Route::get('/', function () {
             $returnDetails = Carrinho::where("pedido_id_fk", '=', $idPedido)->join("produto", 'produto_id', 'produto_id_fk')->get();
             $valorTotalPedido = Pedido::where("pedido_id", '=', $idPedido)->get();
         }
+        $usuario = User::where("usuario_id", '=', Auth::user()->usuario_id)
+            ->where('ativo', '=',  1)
+            ->get();
     }
 
     $categorias = DB::table('categoria')->where('ativo', '=', 1)->get();
@@ -38,7 +42,7 @@ Route::get('/', function () {
         ->where("produto.ativo", '=', 1)
         ->get();
 
-    return view('index', compact('returnDetails', 'valorTotalPedido', 'categorias', 'produtos'));
+    return view('index', compact('returnDetails', 'valorTotalPedido', 'categorias', 'produtos', 'usuario'));
 })->name('inicio');
 
 Route::get('/singleProduct/{id}', 'ProdutoController@singleProduct')->name('singleProduct');
@@ -52,6 +56,8 @@ Route::post('/pagsesdsdsds', 'NotificationController@notification')->name('pagse
 Route::post('/pagseguro', 'CompraController@payment')->name('api.pagseguro');
 Route::get('/paymentVirtual', 'PedidoController@paymentVirtual')->name('paymentVirtual');
 Route::get('/validarCupom', 'PedidoController@validarCupom')->name('validarCupom');
+
+Route::get('/moedaVirtual/{cupom}', 'CupomControllerAPI@validarCupom')->name('validarCupomAPI');
 
 Auth::routes();
 

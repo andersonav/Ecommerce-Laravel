@@ -34,9 +34,14 @@ class HomeController extends Controller
         $usuario = User::where("usuario_id", '=', Auth::user()->usuario_id)
             ->where('ativo', '=',  1)
             ->get();
-        $idPedido = $selectPedido[0]->pedido_id;
-        $returnDetails = Carrinho::where("pedido_id_fk", '=', $idPedido)->join("produto", 'produto_id', 'produto_id_fk')->get();
-        $valorTotalPedido = Pedido::where("pedido_id", '=', $idPedido)->get();
+        $returnDetails = array();
+        $valorTotalPedido = array();
+        if (count($selectPedido) != 0) {
+            $idPedido = $selectPedido[0]->pedido_id;
+            $returnDetails = Carrinho::where("pedido_id_fk", '=', $idPedido)->join("produto", 'produto_id', 'produto_id_fk')->get();
+            $valorTotalPedido = Pedido::where("pedido_id", '=', $idPedido)->get();
+        }
+
         return view('home', compact('returnDetails', 'valorTotalPedido', 'usuario'));
     }
 }

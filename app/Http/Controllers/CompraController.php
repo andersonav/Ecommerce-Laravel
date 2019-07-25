@@ -7,8 +7,11 @@ use PagSeguro;
 use App\Carrinho;
 use App\Pedido;
 use Auth;
+use App\Cupom;
 use App\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendMailUser;
 
 class CompraController extends Controller
 {
@@ -102,17 +105,17 @@ class CompraController extends Controller
         $forma = $this->returnForma($transaction->paymentMethod->type);
         if ($transaction->status == 3) {
             $cupom = substr(md5(date("H:i:s")), 1, 6);
-            $pedido = Pedido::where("pedido_id", '=', $transaction->reference)->get();
+            $pedido = Pedido::where("pedido_id", '=', 1)->get();
+            $usuario = User::where("usuario_id", '=', $pedido[0]->usuario_id_fk)->get();
             $valorPedido = $pedido[0]->valor_total;
-
-            $insertCupom = DB::table('cupom')->create([
+            $insertCupom = Cupom::create([
                 'limite' => 1,
                 'valor' => intval($valorPedido),
                 'identificador' => $cupom,
                 'ativo' => 1
             ]);
-
             // Enviar email para cliente com cupom
+            Mail::to($usuario[0]->email)->send(new SendMailUser($cupom));
         }
 
         $updateFatura = Pedido::where('pedido_id', '=', $transaction->reference)->update([

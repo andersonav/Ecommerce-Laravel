@@ -103,30 +103,54 @@ class PedidoController extends Controller
             ->where('usuario_id_fk', '=',  Auth::user()->usuario_id)
             ->get();
         $response = array();
-        if ($usuario[0]->saldo >= $selectPedido[0]->valorTotal) {
-            if ($usuario[0]->saldo == 0 ||  $selectPedido[0]->valor_total == 0) {
-                $response = [
-                    "mensagem" => "Saldo insuficiente ou nenhum produto no carrinho!",
-                    "tipoMensagem" => 'error'
-                ];
-            } else {
-                $decrementSaldo = User::where("usuario_id", '=', Auth::user()->usuario_id)
-                    ->decrement('saldo', $selectPedido[0]->valor_total);
+        if (count($selectPedido) != 0) {
+            if ($usuario[0]->saldo >= $selectPedido[0]->valor_total) {
+                if ($usuario[0]->saldo == 0 ||  $selectPedido[0]->valor_total == 0) {
+                    $response = [
+                        "mensagem" => "Saldo insuficiente ou nenhum produto no carrinho!",
+                        "tipoMensagem" => 'error'
+                    ];
+                } else {
+                    $decrementSaldo = User::where("usuario_id", '=', Auth::user()->usuario_id)
+                        ->decrement('saldo', $selectPedido[0]->valor_total);
 
-                $updateStatusPedido = Pedido::where("pedido_id", '=', $selectPedido[0]->pedido_id)->update([
-                    'status' => 'Aprovado'
-                ]);
+                    $updateStatusPedido = Pedido::where("pedido_id", '=', $selectPedido[0]->pedido_id)->update([
+                        'status' => 'Aprovado'
+                    ]);
+                    $response = [
+                        "mensagem" => "Pagamento através de moeda virtual realizado!",
+                        "tipoMensagem" => 'success'
+                    ];
+                }
+            } else {
+                // if ($usuario[0]->saldo == 0 ||  $selectPedido[0]->valor_total == 0) {
+                //     $response = [
+                //         "mensagem" => "Saldo insuficiente ou nenhum produto no carrinho!",
+                //         "tipoMensagem" => 'error'
+                //     ];
+                // } else {
+                //     $decrementSaldo = User::where("usuario_id", '=', Auth::user()->usuario_id)
+                //         ->decrement('saldo', $usuario[0]->saldo);
+                //     $updateStatusPedido = Pedido::where("pedido_id", '=', $selectPedido[0]->pedido_id)->update([
+                //         'valor_total' => intval($selectPedido[0]->valor_total - $usuario[0]->saldo)
+                //     ]);
+                //     $response = [
+                //         "mensagem" => "Uma parte do pagamento foi realizada usando a moeda virtual!",
+                //         "tipoMensagem" => 'success'
+                //     ];
+                // }
                 $response = [
-                    "mensagem" => "Pagamento através de moeda virtual realizado!",
+                    "mensagem" => "Saldo insuficiente para pagar com moeda virtual!",
                     "tipoMensagem" => 'success'
                 ];
             }
         } else {
             $response = [
-                "mensagem" => "Pagamento não realizado, pois saldo da moeda virtual é inferior ao valor da compra!",
+                "mensagem" => "Nenhum pedido em andamento!",
                 "tipoMensagem" => 'error'
             ];
         }
+
         return response()->json($response);
     }
 
