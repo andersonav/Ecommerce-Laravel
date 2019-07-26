@@ -62,3 +62,4 @@ Route::get('/moedaVirtual/{cupom}', 'CupomControllerAPI@validarCupom')->name('va
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::post('/editarDados', 'HomeController@editarDados')->name('editarDados');
